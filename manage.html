@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+    <title>PUBG Esports Lounge</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PUBG Esports Lounge" />
+    <meta property="og:image" content="./assets/main.png" />
+    <meta property="og:description" content="Welcome To PUBG Esports Lounge" />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        user-select: none;
+        font-family: "main", "korean";
+      }
+      @font-face {
+        font-family: "main";
+        src: url("font/main.otf");
+        unicode-range: U+0041-005A, U+0061-007A, U+0030-0039, U+0020-002F,
+          U+003A-0040, U+005B-0060, U+007B-007E;
+      }
+      @font-face {
+        font-family: "korean";
+        src: url("font/kr.otf");
+        unicode-range: U+AC00-D7A3;
+      }
+      body {
+        margin: 0;
+        font-family: "main";
+        background-image: url("./assets/img/background.png");
+      }
+      #chatTitle {
+        color: white;
+      }
+      #topCon {
+        position: fixed;
+        background-color: rgb(241, 249, 88);
+        width: 100%;
+        display: flex;
+        border-bottom: 1.5px solid rgb(212, 220, 78);
+        /* padding: 10px; */
+      }
+      #logoCon {
+        margin-left: 30px;
+        padding: 5px;
+        background-color: black;
+        width: fit-content;
+      }
+      #title {
+        font-size: 25px;
+        height: fit-content;
+        margin: auto 0;
+        margin-left: 10px;
+      }
+      #pubglogo {
+        width: 30px;
+        margin: 0 auto;
+      }
+      #mainCon {
+        padding: 30px;
+        padding-top: 80px;
+        display: flex;
+        width: 100%;
+        height: calc(100vh - 80px);
+      }
+      #chatList {
+        width: 30%;
+        min-width: 200px;
+      }
+      #chatTitle {
+        font-size: 33px;
+      }
+      #chatCon {
+        height: 85vh;
+        background-color: rgb(242, 242, 242);
+        width: 70%;
+        margin-left: 30px;
+        padding-top: 0px;
+        border: 1px solid rgba(241, 249, 88, 0.8);
+        display: flex;
+        flex-direction: column;
+      }
+      .chatTitle,
+      .chatTitleAn {
+        font-size: 25px;
+        border: 1.5px solid rgb(212, 220, 78);
+        background-color: rgb(242, 242, 242);
+        list-style-type: none;
+        list-style: none;
+        padding: 5px;
+        padding-left: 15px;
+        margin-bottom: 5px;
+      }
+      .chatTitle:hover,
+      .chatTitleAn:hover {
+        background-color: rgb(241, 249, 88);
+      }
+      #currTitle {
+        font-size: 30px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 0.8);
+        padding: 10px;
+      }
+      #addBTN,
+      #addanBTN {
+        font-size: 25px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+      }
+      #addanBTN {
+        font-size: 25px;
+      }
+      #chatul {
+        flex-grow: 1;
+        overflow-y: scroll;
+        height: 30.5vh;
+        overflow-x: hidden;
+
+        padding: 10px;
+      }
+      #annul {
+        flex-grow: 1;
+        overflow-y: scroll;
+        height: 30.5vh;
+        overflow-x: hidden;
+
+        padding: 10px;
+      }
+      #form {
+        width: 30%;
+        border: 1.5px solid rgb(212, 220, 78);
+        position: fixed;
+        top: 15%;
+        background-color: rgba(241, 249, 88, 1);
+        left: 35%;
+        padding: 5px;
+        display: none;
+      }
+      #addClose {
+        float: right;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 3px 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      #addClose:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+      }
+      #chatinp {
+        font-size: 15px;
+        margin-top: 5px;
+        width: 80%;
+        margin-left: 10%;
+        text-align: center;
+        outline: none;
+        padding: 5px;
+        border: none;
+      }
+      #chatBTN {
+        text-align: center;
+        border: 1.5px solid rgb(212, 220, 78);
+        margin-top: 5px;
+        width: 30%;
+        padding: 3px 1.5px;
+        margin-left: 35%;
+        cursor: pointer;
+      }
+      #chatBTN:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+      }
+      #addtitle {
+        margin-left: 30%;
+        font-size: 30px;
+        text-align: center;
+      }
+      .msg {
+        border: 1.5px solid rgb(212, 220, 78);
+        background-color: rgb(244, 244, 244);
+        min-width: 40%;
+        width: fit-content;
+        margin: 5px;
+        padding: 5px;
+      }
+      .removeMsg {
+        float: right;
+        width: fit-content;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 3px 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .removeMsg:hover {
+        background-color: rgb(241, 249, 88);
+      }
+      .id {
+        font-size: 25px;
+        width: fit-content;
+        max-width: 80%;
+        overflow-x: hidden;
+        padding: 0px 5px;
+      }
+      .msgCon {
+        font-size: 20px;
+        overflow: scroll;
+        padding: 0px 5px;
+      }
+      #chatScreen {
+        height: 80%;
+        overflow-y: scroll;
+      }
+      #message-input {
+        outline: none;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 5px;
+        font-size: 17px;
+        width: 80%;
+        resize: none;
+        height: 33px;
+      }
+      #sendBTN {
+        width: 20%;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 5px 10px;
+        font-size: 17px;
+        background-color: rgb(241, 249, 88);
+        box-sizing: border-box;
+        cursor: pointer;
+        text-align: center;
+      }
+      #chat-form {
+        display: flex;
+        width: 50%;
+        margin: auto;
+        margin-top: 12px;
+      }
+
+      @media (max-width: 768px) {
+        #mainCon {
+          flex-direction: column;
+          padding-top: 60px;
+        }
+        #chatList,
+        #chatCon {
+          width: 100%;
+          max-width: none;
+          margin: 0;
+        }
+        #chatCon {
+          margin-top: 30px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #topCon {
+          display: flex;
+        }
+        #chatList {
+          margin-top: 25px;
+        }
+        #title {
+          font-size: 18px;
+        }
+        #currTitle,
+        #addBTN,
+        #addanBTN {
+          font-size: 25px;
+        }
+        #chatTitle {
+          font-size: 24px;
+        }
+        #addtitle {
+          font-size: 20px;
+        }
+        .msg {
+          font-size: 16px;
+        }
+        .id {
+          font-size: 18px;
+        }
+        .msgCon {
+          font-size: 16px;
+        }
+        #message-input {
+          font-size: 14px;
+        }
+        #sendBTN {
+          font-size: 14px;
+        }
+        #chat-form {
+          width: 90%;
+          margin-bottom: 10px;
+        }
+        #chatul,
+        #annul {
+          max-height: 10vh;
+        }
+        #chatScreen {
+          height: 33vh;
+        }
+      }
+      .delChat,
+      .delChatAn {
+        background-color: rgb(241, 249, 88);
+        padding: 0px 5px;
+        float: right;
+      }
+      .delChat:hover,
+      .delChatAn:hover {
+        background-color: white;
+      }
+      .titleSpan,
+      .titleSpanAn {
+        width: fit-content;
+      }
+
+      #anFormCon {
+        background-color: white;
+        position: fixed;
+        width: 50%;
+        left: 25%;
+        top: 15%;
+        box-sizing: border-box;
+        border: 1.5px solid rgb(212, 220, 78);
+        display: none;
+      }
+      #anFormTitle {
+        margin-bottom: 5px;
+        font-size: 25px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+      }
+      .anFormSub {
+        text-align: center;
+        font-size: 23px;
+        margin: 5px;
+      }
+      #anDes {
+        width: 90%;
+        margin-left: 5%;
+        box-sizing: border-box;
+        padding: 5px;
+        font-size: 18px;
+        height: 30vh;
+        resize: none;
+        border: 1.5px solid rgb(212, 220, 78);
+      }
+      #anFormINP {
+        width: 70%;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 18px;
+        padding: 5px;
+        resize: none;
+        border: 1.5px solid rgb(212, 220, 78);
+        box-sizing: border-box;
+      }
+      #anFormINP:focus,
+      #anDes:focus {
+        border: 1.5px solid rgb(212, 220, 78);
+        outline: none;
+      }
+      #anBTNcon {
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+      }
+      .anBTNs {
+        font-size: 20px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+        width: 20%;
+        box-sizing: border-box;
+        margin: 5px;
+        border: none;
+        outline: none;
+      }
+      .anBTNs:hover {
+        background-color: black;
+        color: white;
+      }
+      #anPic {
+        font-size: 15px;
+        width: 30%;
+        margin-left: 35%;
+      }
+
+      #announceCon {
+        padding: 5px;
+        display: none;
+      }
+      #announceIMGCon {
+        max-height: 300px;
+        display: flex;
+        margin: 5px 0;
+        justify-content: center;
+        align-items: center;
+      }
+      #announceIMG {
+        height: 300px;
+      }
+      #announceDes {
+        font-size: 20px;
+        padding: 5px;
+      }
+      #password {
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+      #pwddes {
+        font-size: 35px;
+        color: white;
+        text-align: center;
+        margin-top: 30vh;
+        margin-bottom: 1vh;
+      }
+      #pwdINP {
+        font-size: 18px;
+        width: 40%;
+        margin-right: 0.2vw;
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      #pwdINP:focus {
+        outline: none;
+      }
+      #pwdBTN {
+        background-color: rgba(241, 249, 88, 0.8);
+        font-size: 18px;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 5px 10px;
+        border: none;
+      }
+      #pwdBTN:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+      }
+      #alertPWD {
+        background-color: rgba(255, 0, 0, 0.8);
+        font-size: 20px;
+        color: white;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        transition: all ease 0.1s;
+        text-align: center;
+        width: fit-content;
+        margin: 0 auto;
+        margin-top: 1vh;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="topCon">
+      <div id="logoCon">
+        <img id="pubglogo" src="./assets/logo/logoTop.png" />
+      </div>
+      <div id="title">PUBG ESPORTS LOUNGE MANAGEMENT</div>
+    </div>
+    <div id="password">
+      <div id="pwddes">ENTER PASSWORD TO USE THIS DASHBOARD</div>
+      <div style="display: flex; margin: 0 auto; justify-content: center">
+        <input id="pwdINP" type="password" placeholder="PASSWORD" />
+        <button id="pwdBTN">ENTER</button>
+      </div>
+      <div id="alertPWD">WRONG PASSWORD</div>
+    </div>
+    <div id="mainCon">
+      <div id="chatList">
+        <div id="chatTitle">CHAT LIST</div>
+        <div id="chatul">
+          <li class="chatTitle">
+            <span class="titleSpan">PGS3</span> <span class="delChat">X</span>>
+          </li>
+        </div>
+        <div id="addBTN">ADD CHAT</div>
+        <div id="chatTitle" style="margin-top: 5px">ANNOUNCEMENT LIST</div>
+        <div id="annul"></div>
+        <div id="addanBTN">ADD ANNOUNCEMENT</div>
+      </div>
+
+      <div id="chatCon">
+        <div id="currTitle">SELECT CHAT/ANNOUNCEMENT FROM LIST</div>
+        <div id="chatScreen">
+          <div id="announceCon">
+            <div id="announceIMGCon">
+              <img id="announceIMG" src="" />
+            </div>
+            <div id="announceDes"></div>
+          </div>
+        </div>
+        <div>
+          <form id="chat-form">
+            <textarea
+              type="text"
+              id="message-input"
+              autocomplete="off"
+            ></textarea>
+            <button type="submit" id="sendBTN">SEND</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="form">
+      <div id="addClose">X</div>
+      <span id="addtitle">ADD CHANNEL</span>
+      <input id="chatinp" type="text" placeholder="Enter New Channel Name" />
+
+      <div id="chatBTN">ADD</div>
+    </div>
+    <div id="anFormCon">
+      <div id="anFormTitle">NEW ANNOUNCEMENT</div>
+      <form id="anForm">
+        <div class="anFormSub">TITLE</div>
+        <div style="text-align: center">
+          <input
+            type="text"
+            placeholder="Title of the announcement"
+            id="anFormINP"
+          />
+        </div>
+        <div class="anFormSub">CONTENT</div>
+
+        <textarea
+          type="text"
+          id="anDes"
+          autocomplete="off"
+          placeholder="Content goes here"
+        ></textarea>
+        <div class="anFormSub">You Can Upload Only 1 Picture</div>
+        <input type="file" id="anPic" accept="" name="myFile1" />
+        <div id="anBTNcon">
+          <button type="submit" id="anSub" class="anBTNs">SEND</button>
+          <div type="submit" id="anCan" class="anBTNs">CANCEL</div>
+        </div>
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      socket.on("connect", () => {
+        console.log("connected to server");
+      });
+
+      socket.on("disconnect", () => {
+        console.log("disconnected from server");
+      });
+    </script>
+    <script>
+      let chatForm = document.querySelector("#chat-form");
+      let chat = null;
+      let addBTN = document.querySelector("#addBTN");
+      let addClose = document.querySelector("#addClose");
+      let addChat = document.querySelector("#chatBTN");
+      let curr_chat = null;
+      const messageInput = document.getElementById("message-input");
+      let chatBTNs = null;
+      let announcement = null;
+      addBTN.addEventListener("click", () => {
+        document.querySelector("#form").style.display = "block";
+      });
+      addClose.addEventListener("click", () => {
+        de_addBTN();
+      });
+      addChat.addEventListener("click", () => {
+        let newChat = {
+          title: document.querySelector("#chatinp").value,
+        };
+        if (newChat["title"] !== "") {
+          console.log("add", newChat);
+          de_addBTN();
+          fetch("/addChat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newChat),
+          }).then(() => loadChat());
+        } else {
+          console.log("add name");
+        }
+      });
+      function loadChat() {
+        let pre = document.querySelectorAll(".chatTitle");
+        for (let i = 0; i < pre.length; i++) {
+          pre[i].remove();
+        }
+        fetch("/loadChat", {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((data) => (chat = data))
+          .then(() => render_list());
+      }
+      function render_list() {
+        let keys = Object.keys(chat);
+        for (let i = 0; i < keys.length; i++) {
+          let li = document.createElement("li");
+          let titleSpan = document.createElement("span");
+          let span = document.createElement("span");
+          titleSpan.innerHTML = keys[i];
+          titleSpan.classList.add("titleSpan");
+          li.classList.add("chatTitle");
+          span.innerHTML = "X";
+          span.classList.add("delChat");
+          li.append(titleSpan);
+          li.append(span);
+          document.querySelector("#chatul").append(li);
+        }
+        let delBTNs = document.querySelectorAll(".delChat");
+        chatBTNs = document.querySelectorAll(".chatTitle");
+
+        for (let i = 0; i < delBTNs.length; i++) {
+          delBTNs[i].addEventListener("click", (e) => {
+            let title = document.querySelectorAll(".titleSpan")[i].innerHTML;
+            fetch("/removeChat", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ title }),
+            })
+              // .then((res) => loadChat())
+              .then(() => {
+                document.querySelector("#currTitle").innerHTML =
+                  "SELECT CHAT/ANNOUNCEMENT FROM LIST";
+                curr_chat = null;
+                let prev = document.querySelectorAll(".msg");
+                for (let i = 0; i < prev.length; i++) {
+                  prev[i].remove();
+                }
+                loadChat();
+              })
+              .catch((err) => console.log(err));
+            e.stopPropagation();
+          });
+
+          chatBTNs[i].addEventListener("click", () => {
+            document.querySelector("#announceCon").style.display = "none";
+            fetch("/loadChat", {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                render_chat(
+                  document.querySelectorAll(".titleSpan")[i].innerHTML,
+                  data
+                );
+              });
+
+            document.querySelector("#currTitle").innerHTML =
+              document.querySelectorAll(".titleSpan")[i].innerHTML;
+            curr_chat = document.querySelectorAll(".titleSpan")[i].innerHTML;
+          });
+        }
+      }
+      function render_default(title) {
+        document.querySelector("#currTitle").innerHTML =
+          "SELECT CHAT/ANNOUNCEMENT FROM LIST";
+        let msgs = document.querySelectorAll(".msg");
+        for (let i = 0; i < msgs.length; i++) {
+          msgs[i].remove();
+        }
+        fetch("/removeChat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title }),
+        })
+          .then((res) => res.json())
+
+          .catch((err) => console.log(err));
+      }
+      function render_chat(title, data) {
+        let prev = document.querySelectorAll(".msg");
+        for (let i = 0; i < prev.length; i++) {
+          prev[i].remove();
+        }
+        let msgArr = data[title];
+        for (let i = 0; i < msgArr.length; i++) {
+          const li = document.createElement("div");
+          li.classList.add("msg");
+          const msg = document.createElement("msgCon");
+
+          msg.innerHTML = `${msgArr[i]["id"]} : ${msgArr[i]["msg"]}`;
+          li.append(msg);
+          document.querySelector("#chatScreen").appendChild(li);
+        }
+      }
+      function de_addBTN() {
+        document.querySelector("#form").style.display = "none";
+        document.querySelector("#chatinp").value = "";
+      }
+      loadChat();
+      getAnnounce();
+      document.querySelector("#anForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const title = document.querySelector("#anFormINP").value;
+        let des = document.querySelector("#anDes").value;
+        des = des.replace(/\n/g, "<br />");
+
+        if (e.target.myFile1.files.length !== 0) {
+          formData.append("myFile1", e.target.myFile1.files[0]);
+          formData.append("title", title);
+          formData.append("des", des);
+          axios.post("/newannounce", formData).then(() => {
+            closeAn();
+            getAnnounce();
+          });
+        } else {
+          const defaultImageURL = "https://i.ibb.co/G7w0gF5/de.png";
+          fetch(defaultImageURL)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const defaultFile = new File([blob], "default-image.png", {
+                type: "image/png",
+              });
+              formData.append("myFile1", defaultFile);
+
+              formData.append("title", title);
+              formData.append("des", des);
+
+              return axios.post("/newannounce", formData);
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("Announcement uploaded");
+                closeAn();
+                getAnnounce();
+              }
+            })
+            .catch((error) => {
+              console.error("Error uploading announcement:", error);
+            });
+        }
+      });
+      function getAnnounce() {
+        let pre = document.querySelectorAll(".chatTitleAn");
+        for (let i = 0; i < pre.length; i++) {
+          pre[i].remove();
+        }
+        fetch("/getAnnounce", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => (announcement = data))
+          .then(() => render_anList());
+      }
+      function render_anList() {
+        let data = announcement["new"];
+        for (let i = 0; i < data.length; i++) {
+          let li = document.createElement("li");
+          let titleSpan = document.createElement("span");
+          let span = document.createElement("span");
+          titleSpan.innerHTML = data[i]["title"];
+          titleSpan.classList.add("titleSpanAn");
+          li.classList.add("chatTitleAn");
+          span.innerHTML = "X";
+          span.classList.add("delChatAn");
+          li.append(titleSpan);
+          li.append(span);
+          document.querySelector("#annul").append(li);
+        }
+        let delBTNs = document.querySelectorAll(".delChatAn");
+        chatBTNs = document.querySelectorAll(".chatTitleAn");
+        for (let i = 0; i < delBTNs.length; i++) {
+          delBTNs[i].addEventListener("click", (e) => {
+            let title = document.querySelectorAll(".titleSpanAn")[i].innerHTML;
+            fetch("/removeAnnounce", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ i }),
+            })
+              .then((res) => {
+                getAnnounce();
+                document.querySelector("#announceCon").style.display = "none";
+                document.querySelector("#currTitle").innerHTML =
+                  "SELECT CHAT/ANNOUNCEMENT FROM LIST";
+              })
+              .catch((err) => console.log(err));
+            e.stopPropagation();
+          });
+          //공지렌더링
+          chatBTNs[i].addEventListener("click", () => {
+            fetch("/getImage", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ filename: announcement["new"][i]["src"] }),
+            })
+              .then((response) => response.blob())
+              .then((blob) => {
+                const imageUrl = URL.createObjectURL(blob);
+
+                announcement["new"][i]["url"] = imageUrl;
+                render_announce(announcement["new"][i]);
+              });
+          });
+        }
+      }
+      function render_announce(data) {
+        let prev = document.querySelectorAll(".msg");
+        for (let i = 0; i < prev.length; i++) {
+          prev[i].remove();
+        }
+        document.querySelector("#currTitle").innerHTML = data["title"];
+        document.querySelector("#announceIMG").src = data["url"];
+        document.querySelector("#announceDes").innerHTML = data["des"];
+        document.querySelector("#announceCon").style.display = "block";
+      }
+      function closeAn() {
+        document.querySelector("#anFormINP").value = "";
+        document.querySelector("#anDes").value = "";
+        document.querySelector("#anPic").value = "";
+        document.querySelector("#anFormCon").style.display = "none";
+      }
+      document.querySelector("#anCan").addEventListener("click", () => {
+        closeAn();
+      });
+      document.querySelector("#addanBTN").addEventListener("click", () => {
+        document.querySelector("#anFormCon").style.display = "block";
+      });
+
+      chatForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let message = messageInput.value;
+
+        message = message.replace(/\n/g, "<br />");
+        let obj = {
+          msg: message,
+          channel: curr_chat,
+          time: new Date(),
+          id: "PUBG",
+        };
+        if (message.trim() !== "" && curr_chat !== null) {
+          socket.emit("chat message", obj);
+          messageInput.value = "";
+          const chat = document.querySelector("#chatScreen");
+          chat.scrollTop = chat.scrollHeight;
+        }
+      });
+      socket.on("chat message", (message) => {
+        const li = document.createElement("div");
+        li.classList.add("msg");
+        const msg = document.createElement("msgCon");
+
+        msg.innerHTML = `${message["id"]}: ${message["msg"]}`;
+        li.append(msg);
+        document.querySelector("#chatScreen").appendChild(li);
+        const chatScreen = document.querySelector("#chatScreen");
+        chatScreen.scrollTop = chatScreen.scrollHeight;
+      });
+
+      document.querySelector("#pwdBTN").addEventListener("click", () => {
+        let pwd = document.querySelector("#pwdINP").value;
+        fetch("/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ pwd }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data["msg"] == 200) {
+              document.querySelector("#password").remove();
+            } else {
+              document.querySelector("#alertPWD").style.display = "block";
+              setTimeout(() => {
+                document.querySelector("#alertPWD").style.display = "none";
+              }, 800);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
