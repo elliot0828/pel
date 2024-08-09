@@ -576,14 +576,17 @@
       });
 
       socket.on("chat message", (message) => {
-        const li = document.createElement("div");
-        li.classList.add("msg");
-        const msg = document.createElement("msgCon");
+        if (curr_chat == message["channel"]) {
+          const li = document.createElement("div");
+          li.classList.add("msg");
+          const msg = document.createElement("msgCon");
 
-        msg.innerHTML = `${message["id"]}: ${message["msg"]}`;
-        console.log(message);
-        li.append(msg);
-        document.querySelector("#chatScreen").appendChild(li);
+          msg.innerHTML = `${message["id"]}: ${message["msg"]}`;
+
+          li.append(msg);
+          document.querySelector("#chatScreen").appendChild(li);
+          chatScreen.scrollTop = chatScreen.scrollHeight;
+        }
       });
 
       function loadChat() {

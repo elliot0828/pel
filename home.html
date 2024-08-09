@@ -4,6 +4,501 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PUBG Esports Lounge</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="/icons/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="/icons/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="/icons/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/icons/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="/icons/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="/icons/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="/icons/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="/icons/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/icons/android-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/icons/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/icons/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PUBG Esports Lounge" />
+    <meta property="og:image" content="./assets/main.png" />
+    <meta property="og:description" content="Welcome To PUBG Esports Lounge" />
+    <style>
+      * {
+        box-sizing: border-box;
+        user-select: none;
+        font-family: "main", "korean";
+      }
+      @font-face {
+        font-family: "main";
+        src: url("font/main.otf");
+        unicode-range: U+0041-005A, U+0061-007A, U+0030-0039, U+0020-002F,
+          U+003A-0040, U+005B-0060, U+007B-007E;
+      }
+      @font-face {
+        font-family: "korean";
+        src: url("font/kr.otf");
+        unicode-range: U+AC00-D7A3;
+      }
+      body {
+        margin: 0;
+        font-family: "main";
+        background-image: url("./assets/img/background.png");
+      }
+      #chatTitle {
+        color: white;
+      }
+      #topCon {
+        position: fixed;
+        background-color: rgb(241, 249, 88);
+        width: 100%;
+        display: flex;
+        border-bottom: 1.5px solid rgb(212, 220, 78);
+        /* padding: 10px; */
+      }
+      #logoCon {
+        margin-left: 30px;
+        padding: 5px;
+        background-color: black;
+        width: fit-content;
+      }
+      #title {
+        font-size: 25px;
+        height: fit-content;
+        margin: auto 0;
+        margin-left: 10px;
+      }
+      #pubglogo {
+        width: 30px;
+        margin: 0 auto;
+      }
+      #mainCon {
+        padding: 30px;
+        padding-top: 80px;
+        display: flex;
+        width: 100%;
+        height: calc(100vh - 80px);
+      }
+      #chatList {
+        width: 30%;
+        min-width: 200px;
+      }
+      #chatTitle {
+        font-size: 33px;
+      }
+      #chatCon {
+        height: 85vh;
+        background-color: rgb(242, 242, 242);
+        width: 70%;
+        margin-left: 30px;
+        padding-top: 0px;
+        border: 1px solid rgba(241, 249, 88, 0.8);
+        display: flex;
+        flex-direction: column;
+      }
+      .chatTitle,
+      .chatTitleAn {
+        font-size: 25px;
+        border: 1.5px solid rgb(212, 220, 78);
+        background-color: rgb(242, 242, 242);
+        list-style-type: none;
+        list-style: none;
+        padding: 5px;
+        padding-left: 15px;
+        margin-bottom: 5px;
+      }
+      .chatTitle:hover,
+      .chatTitleAn:hover {
+        background-color: rgb(241, 249, 88);
+      }
+      #currTitle {
+        font-size: 35px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 0.8);
+        padding: 10px;
+      }
+      #addBTN,
+      #addanBTN {
+        font-size: 35px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+      }
+      #chatul {
+        flex-grow: 1;
+        overflow-y: scroll;
+        height: 37.2vh;
+        overflow-x: hidden;
+
+        padding: 10px;
+      }
+      #annul {
+        flex-grow: 1;
+        overflow-y: scroll;
+        height: 37.2vh;
+        overflow-x: hidden;
+
+        padding: 10px;
+      }
+      #form {
+        width: 30%;
+        border: 1.5px solid rgb(212, 220, 78);
+        position: fixed;
+        top: 15%;
+        background-color: rgba(241, 249, 88, 1);
+        left: 35%;
+        padding: 5px;
+        display: none;
+      }
+      #addClose {
+        float: right;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 3px 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      #addClose:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+      }
+      #chatinp {
+        font-size: 15px;
+        margin-top: 5px;
+        width: 80%;
+        margin-left: 10%;
+        text-align: center;
+        outline: none;
+        padding: 5px;
+        border: none;
+      }
+      #chatBTN {
+        text-align: center;
+        border: 1.5px solid rgb(212, 220, 78);
+        margin-top: 5px;
+        width: 30%;
+        padding: 3px 1.5px;
+        margin-left: 35%;
+        cursor: pointer;
+      }
+      #chatBTN:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+      }
+      #addtitle {
+        margin-left: 30%;
+        font-size: 30px;
+        text-align: center;
+      }
+      .msg {
+        border: 1.5px solid rgb(212, 220, 78);
+        background-color: rgb(244, 244, 244);
+        min-width: 40%;
+        width: fit-content;
+        margin: 5px;
+        padding: 5px;
+      }
+      .removeMsg {
+        float: right;
+        width: fit-content;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 3px 5px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .removeMsg:hover {
+        background-color: rgb(241, 249, 88);
+      }
+      .id {
+        font-size: 25px;
+        width: fit-content;
+        max-width: 80%;
+        overflow-x: hidden;
+        padding: 0px 5px;
+      }
+      .msgCon {
+        font-size: 20px;
+        overflow: scroll;
+        padding: 0px 5px;
+      }
+      #chatScreen {
+        height: 80%;
+        overflow-y: scroll;
+      }
+      #message-input {
+        outline: none;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 5px;
+        font-size: 17px;
+        width: 85%;
+        resize: none;
+        height: 33px;
+      }
+      #sendBTN {
+        width: 15%;
+        border: 1.5px solid rgb(212, 220, 78);
+        padding: 5px 10px;
+        font-size: 17px;
+        background-color: rgb(241, 249, 88);
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+      #chat-form {
+        display: flex;
+        width: 50%;
+        margin: auto;
+        margin-top: 12px;
+      }
+
+      @media (max-width: 768px) {
+        #mainCon {
+          flex-direction: column;
+          padding-top: 60px;
+        }
+        #chatList,
+        #chatCon {
+          width: 100%;
+          max-width: none;
+          margin: 0;
+        }
+        #chatCon {
+          margin-top: 30px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #topCon {
+          flex-direction: column;
+          align-items: center;
+        }
+        #title {
+          font-size: 18px;
+        }
+        #currTitle,
+        #addBTN,
+        #addanBTN {
+          font-size: 25px;
+        }
+        #chatTitle {
+          font-size: 24px;
+        }
+        #addtitle {
+          font-size: 20px;
+        }
+        .msg {
+          font-size: 16px;
+        }
+        .id {
+          font-size: 18px;
+        }
+        .msgCon {
+          font-size: 16px;
+        }
+        #message-input {
+          font-size: 14px;
+        }
+        #sendBTN {
+          font-size: 14px;
+        }
+        #chat-form {
+          width: 90%;
+        }
+      }
+      #anFormCon {
+        background-color: white;
+        position: fixed;
+        width: 50%;
+        left: 25%;
+        top: 15%;
+        box-sizing: border-box;
+        border: 1.5px solid rgb(212, 220, 78);
+        display: none;
+      }
+      #anFormTitle {
+        margin-bottom: 5px;
+        font-size: 25px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+      }
+      .anFormSub {
+        text-align: center;
+        font-size: 23px;
+        margin: 5px;
+      }
+      #anDes {
+        width: 90%;
+        margin-left: 5%;
+        box-sizing: border-box;
+        padding: 5px;
+        font-size: 18px;
+        height: 30vh;
+        resize: none;
+        border: 1.5px solid rgb(212, 220, 78);
+      }
+      #anFormINP {
+        width: 70%;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 18px;
+        padding: 5px;
+        resize: none;
+        border: 1.5px solid rgb(212, 220, 78);
+        box-sizing: border-box;
+      }
+      #anFormINP:focus,
+      #anDes:focus {
+        border: 1.5px solid rgb(212, 220, 78);
+        outline: none;
+      }
+      #anBTNcon {
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+      }
+      .anBTNs {
+        font-size: 20px;
+        text-align: center;
+        background-color: rgba(241, 249, 88, 1);
+        padding: 10px;
+        cursor: pointer;
+        width: 20%;
+        box-sizing: border-box;
+        margin: 5px;
+        border: none;
+        outline: none;
+      }
+      .anBTNs:hover {
+        background-color: black;
+        color: white;
+      }
+      #anPic {
+        font-size: 15px;
+        width: 30%;
+        margin-left: 35%;
+      }
+
+      #announceCon {
+        padding: 5px;
+        display: none;
+      }
+      #announceIMGCon {
+        max-height: 300px;
+        display: flex;
+        margin: 5px 0;
+        justify-content: center;
+        align-items: center;
+      }
+      #announceIMG {
+        height: 300px;
+      }
+      #announceDes {
+        font-size: 20px;
+        padding: 5px;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div id="topCon">
+      <div id="logoCon">
+        <img id="pubglogo" src="./assets/logo/logoTop.png" />
+      </div>
+      <div id="title">PUBG ESPORTS LOUNGE</div>
+    </div>
+    <div id="mainCon">
+      <div id="chatList">
+        <div id="chatTitle">CHAT LIST</div>
+        <div id="chatul">
+          <li class="chatTitle">PGS3</li>
+        </div>
+        <div id="chatTitle" style="margin-top: 3px">ANNOUNCEMENT LIST</div>
+        <div id="annul">
+          <li class="chatTitleAn">
+            <span class="titleSpanAn">PNC 2024</span>
+          </li>
+        </div>
+      </div>
+      <div id="chatCon">
+        <div id="currTitle">SELECT CHAT/ANNOUNCEMENT FROM LIST</div>
+        <div id="chatScreen">
+          <div id="announceCon">
+            <div id="announceIMGCon">
+              <img id="announceIMG" src="" />
+            </div>
+            <div id="announceDes"></div>
+          </div>
+        </div>
+        <div>
+          <form id="chat-form">
+            <textarea
+              type="text"
+              id="message-input"
+              autocomplete="off"
+            ></textarea>
+            <button type="submit" id="sendBTN">SEND</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

@@ -946,15 +946,18 @@
         }
       });
       socket.on("chat message", (message) => {
-        const li = document.createElement("div");
-        li.classList.add("msg");
-        const msg = document.createElement("msgCon");
+        console.log(curr_chat == message["channel"]);
+        if (curr_chat == message["channel"]) {
+          const li = document.createElement("div");
+          li.classList.add("msg");
+          const msg = document.createElement("msgCon");
 
-        msg.innerHTML = `${message["id"]}: ${message["msg"]}`;
-        li.append(msg);
-        document.querySelector("#chatScreen").appendChild(li);
-        const chatScreen = document.querySelector("#chatScreen");
-        chatScreen.scrollTop = chatScreen.scrollHeight;
+          msg.innerHTML = `${message["id"]}: ${message["msg"]}`;
+
+          li.append(msg);
+          document.querySelector("#chatScreen").appendChild(li);
+          chatScreen.scrollTop = chatScreen.scrollHeight;
+        }
       });
 
       document.querySelector("#pwdBTN").addEventListener("click", () => {

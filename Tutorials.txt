@@ -1,0 +1,9 @@
+배포
+- 로컬
+git add .
+git commit -m "coomit 이름 (v1)"
+git origin push master
+
+- 서버 
+git pull
+pm2 restart all
