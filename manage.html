@@ -877,6 +877,10 @@
                 document.querySelector("#announceCon").style.display = "none";
                 document.querySelector("#currTitle").innerHTML =
                   "SELECT CHAT/ANNOUNCEMENT FROM LIST";
+                let pre = document.querySelectorAll(".msg");
+                for (let i = 0; i < pre.length; i++) {
+                  pre[i].remove();
+                }
               })
               .catch((err) => console.log(err));
             e.stopPropagation();
